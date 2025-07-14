@@ -2,12 +2,11 @@ import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 
 type Props = {
-  params: Promise<{ shortId: string }> | { shortId: string }
+  params: { shortId: string }
 }
 
-export default async function RedirectPage(props: Props) {
-  const resolvedParams = await props.params
-  const { shortId } = resolvedParams
+export default async function RedirectPage({ params }: Props) {
+  const { shortId } = params
 
   const link = await prisma.shortUrl.findUnique({
     where: { shortId },
