@@ -38,8 +38,10 @@ export async function POST(req: NextRequest) {
       shortUrl: `${baseUrl}/${created.shortId}`,
       expiresAt: created.expiresAt,
     })
-  } catch (err: any) {
-    if (err.code === 'P2002') {
+  } catch (err: unknown) {
+    const error = err as { code?: string }
+
+    if (error.code === 'P2002') {
       return NextResponse.json({ error: 'Short ID already exists' }, { status: 400 })
     }
 
