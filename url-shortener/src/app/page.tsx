@@ -4,7 +4,6 @@ import { useState } from 'react';
 export default function Home() {
   const [original, setOriginal] = useState('');
   const [shortId, setShortId] = useState('');
-  const [expiresAt, setExpiresAt] = useState('');
   const [result, setResult] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -16,7 +15,7 @@ export default function Home() {
       body: JSON.stringify({
         original,
         shortId: shortId || undefined,
-        expiresAt: expiresAt || undefined,
+        // ❌ Không gửi expiresAt nữa
       }),
     });
 
@@ -48,12 +47,6 @@ export default function Home() {
           placeholder="Custom short ID (optional)"
           value={shortId}
           onChange={(e) => setShortId(e.target.value)}
-        />
-        <input
-          className="w-full border p-2 rounded"
-          type="datetime-local"
-          value={expiresAt}
-          onChange={(e) => setExpiresAt(e.target.value)}
         />
 
         <button
