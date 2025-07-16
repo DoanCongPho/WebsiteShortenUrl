@@ -3,11 +3,13 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
   const body = await req.json()
+  const start = Date.now(); 
   const { original, shortId, expiresAt } = body
 
   if (!original) {
     return NextResponse.json({ error: 'Missing URL' }, { status: 400 })
   }
+
 
   const finalShortId = shortId || Math.random().toString(36).substring(2, 8)
 
@@ -32,7 +34,11 @@ export async function POST(req: NextRequest) {
       },
     })
 
+
     const baseUrl = req.nextUrl.origin
+
+    const duration = Date.now() - start; 
+   console.log(`⏱️ Prisma query took ${duration}ms`);
     return NextResponse.json({
       shortId: created.shortId,
       shortUrl: `${baseUrl}/${created.shortId}`,
@@ -47,4 +53,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
+  
+  
 }

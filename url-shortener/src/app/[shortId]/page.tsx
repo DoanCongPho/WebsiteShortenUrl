@@ -7,11 +7,13 @@ export default async function RedirectPage({
   params: Promise<{ shortId: string }>;
 }) {
   const { shortId } = await params;
-
+  const start = Date.now();
   const link = await prisma.shortUrl.findUnique({
     where: { shortId },
   });
 
+  const duration = Date.now() - start;
+  console.log(`⏱️ Prisma query took ${duration}ms`);
   if (!link) {
     return <h1>404 - Short link not found</h1>;
   }
