@@ -15,12 +15,16 @@ export default async function RedirectPage({
   const duration = Date.now() - start;
   console.log(`⏱️ Prisma query took ${duration}ms`);
   if (!link) {
-    return <h1>404 - Short link not found</h1>;
+    return <h1>404 - Short link not found or be expired</h1>;
   }
 
-  if (link.expiresAt && new Date() > new Date(link.expiresAt)) {
-    return <h1>Link expired</h1>;
-  }
+  const now = new Date();
+  const newExpiry = new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000);
+
+  await prisma.shortUrl.update({
+    where: { shortId },
+    data: { expiresAt: newExpiry },
+  });
 
   redirect(link.original);
 }

@@ -14,8 +14,7 @@ export default function Home() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         original,
-        shortId: shortId || undefined,
-        // ❌ Không gửi expiresAt nữa
+        shortId: shortId || undefined, 
       }),
     });
 
