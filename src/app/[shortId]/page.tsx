@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 
 export default async function RedirectPage({
@@ -15,7 +15,7 @@ export default async function RedirectPage({
   const duration = Date.now() - start;
   console.log(`⏱️ Prisma query took ${duration}ms`);
   if (!link) {
-    return <h1>404 - Short link not found or be expired</h1>;
+    return notFound(); 
   }
 
   const now = new Date();
