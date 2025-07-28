@@ -1,29 +1,21 @@
-import { NextResponse } from "next/server";
-import { prisma } from '@/lib/prisma'
+import { supabase } from '@/lib/supabaseClient';
+import { NextResponse } from 'next/server';
+
+interface ShortUrl {
+  id: string;
+  shortId: string;
+  original: string;
+  expiresAt: string;
+}
+
+export async function DELETE() {
+  const now = new Date();
+
+  const { data} = await supabase
+    .from('ShortUrl')
+    .delete()
+    .lt('expiresAt', now) as { data: ShortUrl[] | null };
 
 
-
-export async function DELETE(){ 
-    const now = new Date(); 
-    try{ 
-        const result = await prisma.shortUrl.deleteMany({ 
-            where: { 
-                expiresAt: { 
-                    lt: now, 
-                }   
-            }
-        }); 
-     
-        return NextResponse.json({ 
-            message: `Deleted ${result.count} expired links`, 
-        }); 
-    }catch (err: unknown) {
-    const error = err as { code?: string }
-
-    if (error.code === 'P2002') {
-      return NextResponse.json({ error: 'Short ID already exists' }, { status: 400 })
-    }
-
-    return NextResponse.json({ error: 'Server error' }, { status: 500 })
-  }
+  return NextResponse.json({ message: `Deleted ${data?.length || 0} expired links` });
 }

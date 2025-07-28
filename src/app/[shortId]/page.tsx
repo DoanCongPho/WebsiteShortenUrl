@@ -1,30 +1,30 @@
 import { notFound, redirect } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
-
+import { supabase } from '@/lib/supabaseClient'
 export default async function RedirectPage({
   params,
 }: {
   params: Promise<{ shortId: string }>;
 }) {
   const { shortId } = await params;
-  const start = Date.now();
-  const link = await prisma.shortUrl.findUnique({
-    where: { shortId },
-  });
 
-  const duration = Date.now() - start;
-  console.log(`⏱️ Prisma query took ${duration}ms`);
+  const { data: link } = await supabase
+    .from('ShortUrl')
+    .select('original, expiresAt')
+    .eq('shortId', shortId)
+    .single()
+
   if (!link) {
-    return notFound(); 
+    return notFound();
   }
 
   const now = new Date();
   const newExpiry = new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000);
 
-  await prisma.shortUrl.update({
-    where: { shortId },
-    data: { expiresAt: newExpiry },
-  });
+  await supabase
+    .from('ShortUrl')
+    .update({ expiresAt: newExpiry.toISOString() })
+    .eq('shortId', shortId)
+
 
   redirect(link.original);
 }

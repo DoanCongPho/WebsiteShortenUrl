@@ -10,7 +10,7 @@ export let options = {
 
 
 export default function(){ 
-    const shortUrl = "https://website-shorten-url-qryv.vercel.app/84fqg3"; 
+    const shortUrl = "http://localhost:3000/37gpas"; 
     const res = http.get(shortUrl, {redirects: 0}); 
 
 

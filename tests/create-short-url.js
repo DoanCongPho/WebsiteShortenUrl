@@ -2,12 +2,12 @@ import http from 'k6/http';
 import { check } from 'k6';
 
 export let options = {
-  vus: 1000,
+  vus: 10,
   duration: '10s',
 };
 
 export default function () {
-  const url = 'https://website-shorten-url-qryv.vercel.app/shorten'; 
+  const url = 'http://localhost:3000/api/shorten'; 
   const payload = JSON.stringify({
     original: 'https://example.com/some/long/url',
   
