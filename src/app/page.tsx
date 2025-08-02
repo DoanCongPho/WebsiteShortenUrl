@@ -1,6 +1,8 @@
 'use client';
 import { useState } from 'react';
 
+
+
 export default function Home() {
   const [original, setOriginal] = useState('');
   const [shortId, setShortId] = useState('');
@@ -8,7 +10,7 @@ export default function Home() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     const res = await fetch('/api/shorten', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
